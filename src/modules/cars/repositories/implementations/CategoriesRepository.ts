@@ -13,6 +13,9 @@ class CategoriesRepository implements ICategoriesRepository {
     this.categories = [];
   }
 
+  /**
+   * Singleton Pattern
+   */
   public static getInstance(): CategoriesRepository {
     if (!CategoriesRepository.INSTANCE) {
       CategoriesRepository.INSTANCE = new CategoriesRepository();

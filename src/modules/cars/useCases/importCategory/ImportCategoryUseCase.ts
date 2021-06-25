@@ -1,31 +1,62 @@
 import csvParse from "csv-parse";
 import fs from "fs";
 
+import { ICategoriesRepository } from "../../repositories/ICategoriesRepository";
+
+interface IImportCategory {
+  name: string;
+  description: string;
+}
+
 class ImportCategoryUseCase {
-  execute(file: Express.Multer.File): void {
-    console.log(file);
+  // eslint-disable-next-line prettier/prettier
+  constructor(private categoriesRepository: ICategoriesRepository) { }
 
-    /**
-     * Setting the path of the file it'll be stream
-     */
-    const stream = fs.createReadStream(file.path);
+  loadCategories(file: Express.Multer.File): Promise<IImportCategory[]> {
+    return new Promise((resolve, reject) => {
+      const stream = fs.createReadStream(file.path);
 
-    /**
-     * 'csv-parse' it'll be responsible for transmitting the file
-     */
-    const parseFile = csvParse();
+      const categories: IImportCategory[] = [];
 
-    /** The "stream" now has some new functions. In this case, we will use the pipe
-     * function because it will split the file to be read in parts.
-     *
-     * The argument, will be 'csv-parse'
-     */
-    stream.pipe(parseFile);
+      const parseFile = csvParse();
 
-    /** And now, we will manipulate the file with 'parseFile'. Here, we are reading
-     * line by line and printing */
-    parseFile.on("data", async (line) => {
-      console.log(line);
+      stream.pipe(parseFile);
+
+      /**
+       * It has to be a promise, otherwise, it won't return anything
+       */
+      parseFile
+        .on("data", async (line) => {
+          const [name, description] = line;
+
+          categories.push({
+            name,
+            description,
+          });
+        })
+        .on("end", () => {
+          resolve(categories);
+        })
+        .on("error", (err) => {
+          reject(err);
+        });
+    });
+  }
+
+  async execute(file: Express.Multer.File): Promise<void> {
+    const categories = await this.loadCategories(file);
+
+    categories.map(async (category) => {
+      const { name, description } = category;
+
+      const existsCategory = this.categoriesRepository.findByName(name);
+
+      if (!existsCategory) {
+        this.categoriesRepository.create({
+          name,
+          description,
+        });
+      }
     });
   }
 }
