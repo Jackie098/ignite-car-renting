@@ -30,6 +30,6 @@ CMD ["npm", "run", "dev"]
 # On the example above
   # 1) '-p' is to map the container port with the user port 
   # 2) '3333:3333' 
-        # first - port of the container
-        # second - port of the user port
+        # first - port of the user port 
+        # second - port of the container
   # 3) Finally, we put the name of the image we want to run

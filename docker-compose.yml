@@ -1,0 +1,16 @@
+version: "3.7"
+
+services:
+  app:
+    build: .
+    container_name: rentx
+    ports:
+      - 3333:3333
+    volumes:
+      - .:/usr/app
+
+# This file is to automatically build and run our server instead of doing 
+# manual work with the 'docker'
+
+# To exec this file, at the project root run:
+  # 'docker-compose up'
