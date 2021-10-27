@@ -15,6 +15,11 @@ class CategoriesRepository implements ICategoriesRepository {
 
   /**
    * Singleton Pattern
+   *
+   *  Este padrão garante a existência de apenas uma instância de uma classe,
+   * mantendo um ponto global de acesso ao seu objeto.
+   * Nota linguística: O termo vem do significado em inglês para um conjunto que
+   * contenha apenas um elemento. (wikipedia)
    */
   public static getInstance(): CategoriesRepository {
     if (!CategoriesRepository.INSTANCE) {
