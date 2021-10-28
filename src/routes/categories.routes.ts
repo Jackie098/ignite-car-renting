@@ -18,6 +18,7 @@ categoriesRoutes.post("/", (request, response) => {
 });
 
 categoriesRoutes.get("/", (request, response) => {
+  // console.log("karai q foda");
   return listCategoriesController.handle(request, response);
 });
 

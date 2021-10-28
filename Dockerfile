@@ -2,7 +2,7 @@
 FROM node:latest 
 
 # WORKDIR is where the app will be downloaded on the machine
-WORKDIR /urs/app
+WORKDIR /usr/app
 
 # COPY will copy the json file to the image we are creating
 COPY package.json ./
@@ -23,6 +23,7 @@ EXPOSE 3333
 CMD ["npm", "run", "dev"] 
 
 # The 'docker build -t <name-image> <where it is>' is the command for generate the build
+# This command will be looking for "Dockerfile" as a pattern 
 # Ex:
 # "docker build -t rentx ."
 

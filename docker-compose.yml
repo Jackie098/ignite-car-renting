@@ -8,7 +8,7 @@ services:
       - 3333:3333
     volumes:
       - .:/usr/app
-
+      
 # This file is to automatically build and run our server instead of doing 
 # manual work with the 'docker'
 
