@@ -1,6 +1,18 @@
 version: "3.7"
 
 services:
+  database_ignite:
+    image: postgres # imagem oficial do postgree
+    container_name: database_ignite
+    restart: always
+    ports:
+      - 5432:5432 # porta do pc para porta do container docker
+    environment: # those environments are exists insided the 'postgres image'
+      - POSTGRES_USER=docker
+      - POSTGRES_PASSWORD=ignite
+      - POSTGRES_DB=rentx
+    volumes:
+      - pgdata:/data/postgres
   app:
     build: .
     container_name: rentx
@@ -8,9 +20,20 @@ services:
       - 3333:3333
     volumes:
       - .:/usr/app
+    links: # faz uma ligação entre os containers,  permitindo que o container de destino (api) tenha informações do container de origem(database). Dessa forma, nosso service da aplicação agora conseguirá se comunicar com nosso banco de dados não mais através do IP, mas sim pelo nome do container. 
+      - database_ignite
+    depends_on: # A propriedade depends_on irá informar que nosso serviço de api irá depender do serviço do banco de dados (database).
+      - database_ignite
       
+volumes:
+  pgdata: #Não precisa especificar nada pq o padrão é 'driver:local'
+
+
 # This file is to automatically build and run our server instead of doing 
 # manual work with the 'docker'
 
 # To exec this file, at the project root run:
   # 'docker-compose up'
+
+# Link Util
+# https://www.notion.so/Refatora-o-Docker-com-TypeORM-4500fc0d075349ac9b97d670e734d41b

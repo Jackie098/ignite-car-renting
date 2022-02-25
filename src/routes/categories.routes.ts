@@ -12,13 +12,10 @@ const upload = multer({
 });
 
 categoriesRoutes.post("/", (request, response) => {
-  console.log("reload funcionando");
-
   return createCategoryController.handle(request, response);
 });
 
 categoriesRoutes.get("/", (request, response) => {
-  // console.log("karai q foda");
   return listCategoriesController.handle(request, response);
 });
 
